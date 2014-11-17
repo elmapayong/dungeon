@@ -7,30 +7,50 @@
 #include <random>		//random #s
 using namespace std;
 
-const int dungeonWidth = 10;
-const int dungeonHeight = 5;
-const int maxRooms = 10;
-
-struct room {
-	//room() : upperLeft(false), upperRight(false), lowerLeft(false), lowerRight(false){} //C++11 fix
-	int x, y;
-	bool upperLeft = false, upperRight = false;
-	bool lowerLeft = false, lowerRight = false;
-};
-
-enum Corner {UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT};
+enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
-//Dungeon::Dungeon()
-int main()
+//room* Dungeon::generateRoom()
+room* Dungeon::generateRoom(int x, int y)
 {
-	bool map[dungeonHeight][dungeonWidth];
-	fill(map[0], map[0]+(dungeonWidth*dungeonHeight), false);	//init to all uncreated
+	//a random generator w/ a % chance of returning true
+	random_device rd;
+	mt19937 eng(rd());
+	tr1::bernoulli_distribution randOpen(0.40);	//40% chance of true
+	//randOpen(eng);
+
+	room *temp = new room;
+	temp->x = x;
+	temp->y = y;
+
+	//check location on the map and open doors to adjacent rooms
+	//if ((x - 1) > 0 && map[x - 1][y] == NULL){	//left
+	//	
+	//}
+	//right
+	//top
+	//bottom
+
+
+	//randomly open doors
+	temp->top = randOpen(eng);
+	temp->bottom = randOpen(eng);
+	temp->left = randOpen(eng);
+	temp->right = randOpen(eng);
+
+	return temp;
+}
+
+
+
+
+
+Dungeon::Dungeon() : map{}
+{
+	//unique_ptr<unique_ptr<room>[][]> map(new unique_ptr<room>[dungeonHeight][dungeonWidth]);
 	int totalRooms = 0;
-	unique_ptr<room> temp(new room);
-
+	room *temp = new room;
 	srand(time(0));
-
 
 	//pick a random corner to begin in
 	switch ((rand() % 4)){
@@ -52,13 +72,18 @@ int main()
 		break;
 	}
 
-	map[temp->x][temp->y] = true;
+
+	temp = generateRoom(temp->x, temp->y);
+	map[temp->x][temp->y] = temp;
+
+	cout << "UL:" << map[temp->x][temp->y]->left << "  UR:" << map[temp->x][temp->y]->right << endl;
+	cout << "LL:" << map[temp->x][temp->y]->top << "  LR:" << map[temp->x][temp->y]->bottom << endl;
 
 
 	//print dungeon array of rooms
 	for (int row = 0; row < dungeonHeight; row++){
 		for (int col = 0; col < dungeonWidth; col++){
-			cout << map[row][col];
+			cout << (map[row][col] ? "1" : "0");
 		}
 		cout << "\n"; 
 	}
@@ -69,33 +94,10 @@ int main()
 
 	//}
 
-	delete temp;
 	system("pause");
 }
 
 
-//room* Dungeon::generateRoom()
-unique_ptr<room> generateRoom(int x, int y)
-{
-	random_device rd;
-	mt19937 eng(rd());
-	tr1::bernoulli_distribution randOpen(0.40);
-	//randOpen(eng);
-
-	unique_ptr<room> temp(new room);
-	temp->x = x;
-	temp->y = y;
-
-	//RANDOMLY DETERMINE OPEN DOORS
-
-	return temp;
-}
 
 
-/*
-<random>
-std::random_device rd;
-std::mt19937 mt(rd());
-std::uniform_int_distribution<int> dist(0, 99);
-dist(mt) //to use
-*/
+
