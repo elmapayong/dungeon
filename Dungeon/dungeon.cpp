@@ -1,23 +1,21 @@
 #include "Dungeon.h"
-#include <algorithm>	//for fill()
 #include <iostream>
 #include <cstdlib>		//rand()
 #include <ctime>		//to seed srand()
 #include <memory>		//smart pointers
-#include <random>		//random #s
+#include <random>		//random generators
 using namespace std;
 
 enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
-//room* Dungeon::generateRoom()
+
 room* Dungeon::generateRoom(int x, int y)
 {
 	//a random generator w/ a % chance of returning true
 	random_device rd;
 	mt19937 eng(rd());
 	tr1::bernoulli_distribution randOpen(0.40);	//40% chance of true
-	//randOpen(eng);
 
 	room *temp = new room;
 	temp->x = x;
