@@ -21,6 +21,11 @@ room* Dungeon::generateRoom(int x, int y)
 	temp->x = x;
 	temp->y = y;
 
+	//room out of bounds
+	if (x < 0 || x > dungeonHeight || y < 0 || y > dungeonWidth){
+		return NULL;
+	}
+
 	//check location on the map and open doors to adjacent rooms
 	//if ((x - 1) > 0 && map[x - 1][y] == NULL){	//left
 	//	
