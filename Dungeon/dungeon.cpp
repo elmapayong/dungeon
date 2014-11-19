@@ -1,42 +1,81 @@
 #include "Dungeon.h"
-#include <algorithm>	//for fill()
 #include <iostream>
 #include <cstdlib>		//rand()
 #include <ctime>		//to seed srand()
 #include <memory>		//smart pointers
-#include <random>		//random #s
+#include <random>		//random generators
 using namespace std;
 
 enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
-//room* Dungeon::generateRoom()
+/* Creates room at coordinates.  Returns pointerto room or NULL if out of bounds */
 room* Dungeon::generateRoom(int x, int y)
 {
+	//room out of bounds
+	if (x < 0 || x > dungeonHeight || y < 0 || y > dungeonWidth){
+		return NULL;
+	}
+
 	//a random generator w/ a % chance of returning true
 	random_device rd;
 	mt19937 eng(rd());
 	tr1::bernoulli_distribution randOpen(0.40);	//40% chance of true
-	//randOpen(eng);
 
 	room *temp = new room;
 	temp->x = x;
 	temp->y = y;
 
-	//check location on the map and open doors to adjacent rooms
-	//if ((x - 1) > 0 && map[x - 1][y] == NULL){	//left
-	//	
-	//}
+	//~~~ check adjacent rooms on the map and randomly open doors: ~~~//
+	//left
+	if ((y - 1) >= 0){
+		if (map[x][y - 1] == NULL){
+			temp->left = randOpen(eng);
+			//traverse if open
+		}
+		else{
+			//already a room on the left
+			temp->left = true;
+		}
+	}
+
 	//right
+	if ((y + 1) < dungeonWidth){
+		if (map[x][y + 1] == NULL){
+			temp->right = randOpen(eng);
+			//traverse
+		}
+		else{
+			//already a room on the right
+			temp->right = true;		
+		}
+		
+	}
+
 	//top
+	if ((x - 1) >= 0){
+		if (map[x - 1][y] == NULL){
+			temp->top = randOpen(eng);
+			//traverse
+		}
+		else{
+			//already a room on top
+			temp->top = true;
+		}
+	}
+	
 	//bottom
+	if ((x + 1) < dungeonHeight){
+		if (map[x + 1][y] == NULL){
+			temp->bottom = randOpen(eng);
+		}
+		else{
+			//already a room on the bottom
+			temp->bottom = true;
+		}
+	}
+	
 
-
-	//randomly open doors
-	temp->top = randOpen(eng);
-	temp->bottom = randOpen(eng);
-	temp->left = randOpen(eng);
-	temp->right = randOpen(eng);
 
 	return temp;
 }
