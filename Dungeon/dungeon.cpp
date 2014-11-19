@@ -10,7 +10,7 @@ enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
 /* Creates room at coordinates.  Returns pointerto room or NULL if out of bounds */
-room* Dungeon::generateRoom(int x, int y)
+Room* Dungeon::generateRoom(int x, int y)
 {
 	//room out of bounds
 	if (x < 0 || x > dungeonHeight || y < 0 || y > dungeonWidth){
@@ -20,18 +20,23 @@ room* Dungeon::generateRoom(int x, int y)
 	//a random generator w/ a % chance of returning true
 	random_device rd;
 	mt19937 eng(rd());
-	tr1::bernoulli_distribution randOpen(0.40);	//40% chance of true
+	tr1::bernoulli_distribution randOpen(0.8);	//40% chance of true
 
-	room *temp = new room;
+	Room *temp = new Room;
 	temp->x = x;
 	temp->y = y;
+	map[x][y] = temp;
 
 	//~~~ check adjacent rooms on the map and randomly open doors: ~~~//
 	//left
 	if ((y - 1) >= 0){
-		if (map[x][y - 1] == NULL){
+		if (map[x][y - 1] == NULL && totalRooms <= maxRooms){
 			temp->left = randOpen(eng);
-			//traverse if open
+			//door opened, make a new room on the left
+			if (temp->left){
+				totalRooms++;
+				generateRoom(x, y - 1);
+			}
 		}
 		else{
 			//already a room on the left
@@ -41,9 +46,13 @@ room* Dungeon::generateRoom(int x, int y)
 
 	//right
 	if ((y + 1) < dungeonWidth){
-		if (map[x][y + 1] == NULL){
+		if (map[x][y + 1] == NULL && totalRooms <= maxRooms){
 			temp->right = randOpen(eng);
-			//traverse
+			//door opened, make a new room on the right
+			if (temp->right){
+				totalRooms++;
+				generateRoom(x, y + 1);
+			}
 		}
 		else{
 			//already a room on the right
@@ -54,9 +63,13 @@ room* Dungeon::generateRoom(int x, int y)
 
 	//top
 	if ((x - 1) >= 0){
-		if (map[x - 1][y] == NULL){
+		if (map[x - 1][y] == NULL && totalRooms <= maxRooms){
 			temp->top = randOpen(eng);
-			//traverse
+			//door opened, make a new room on the top
+			if (temp->top){
+				totalRooms++;
+				generateRoom(x - 1, y);
+			}
 		}
 		else{
 			//already a room on top
@@ -65,9 +78,14 @@ room* Dungeon::generateRoom(int x, int y)
 	}
 	
 	//bottom
-	if ((x + 1) < dungeonHeight){
+	if ((x + 1) < dungeonHeight && totalRooms <= maxRooms){
 		if (map[x + 1][y] == NULL){
 			temp->bottom = randOpen(eng);
+			//door opened, make a new room on the bottom
+			if (temp->bottom){
+				totalRooms++;
+				generateRoom(x + 1, y);
+			}
 		}
 		else{
 			//already a room on the bottom
@@ -88,7 +106,7 @@ Dungeon::Dungeon() : map{}
 {
 	//unique_ptr<unique_ptr<room>[][]> map(new unique_ptr<room>[dungeonHeight][dungeonWidth]);
 	int totalRooms = 0;
-	room *temp = new room;
+	Room *temp = new Room;
 	srand(time(0));
 
 	//pick a random corner to begin in
