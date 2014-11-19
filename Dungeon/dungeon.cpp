@@ -9,9 +9,14 @@ using namespace std;
 enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
-
+/* Creates room at coordinates.  Returns pointer or NULL if out of bounds */
 room* Dungeon::generateRoom(int x, int y)
 {
+	//room out of bounds
+	if (x < 0 || x > dungeonHeight || y < 0 || y > dungeonWidth){
+		return NULL;
+	}
+
 	//a random generator w/ a % chance of returning true
 	random_device rd;
 	mt19937 eng(rd());
@@ -21,26 +26,23 @@ room* Dungeon::generateRoom(int x, int y)
 	temp->x = x;
 	temp->y = y;
 
-	//room out of bounds
-	if (x < 0 || x > dungeonHeight || y < 0 || y > dungeonWidth){
-		return NULL;
+	//check adjacent rooms on the map and randomly open doors:
+	if ((y - 1) >= 0 && map[x][y - 1] == NULL){	//left
+		temp->left = randOpen(eng);
 	}
 
-	//check location on the map and open doors to adjacent rooms
-	//if ((x - 1) > 0 && map[x - 1][y] == NULL){	//left
-	//	
-	//}
-	//right
-	//top
-	//bottom
+	if ((y + 1) < dungeonWidth && map[x][y + 1] == NULL){	//right
+		temp->right = randOpen(eng);
+	}
 
-
-	//randomly open doors
-	temp->top = randOpen(eng);
-	temp->bottom = randOpen(eng);
-	temp->left = randOpen(eng);
-	temp->right = randOpen(eng);
-
+	if ((x - 1) >= 0 && map[x - 1][y] == NULL){ //top
+		temp->top = randOpen(eng);
+	}
+	
+	if ((x + 1) < dungeonHeight && map[x + 1][y] == NULL){	//bottom
+		temp->bottom = randOpen(eng);
+	}
+	
 	return temp;
 }
 
