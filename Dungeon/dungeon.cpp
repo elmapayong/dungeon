@@ -9,6 +9,26 @@ using namespace std;
 enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 
+//void Dungeon::printMap()
+//{
+//	for (int row = 0; row < dungeonHeight; row++){
+//		for (int col = 0; col < dungeonWidth; col++){
+//			cout << (map[row][col] ? "1" : "0");
+//		}
+//		cout << "\n";
+//	}
+//
+//	for (int row = 0; row < dungeonHeight; row++){
+//		for (int col = 0; col < dungeonWidth; col++){
+//			for (int col2 = 0; col2 < 2; col2++){
+//				
+//			}
+//		}
+//	}
+//}
+
+
+
 /* Creates room at coordinates.  Returns pointerto room or NULL if out of bounds */
 Room* Dungeon::generateRoom(int x, int y)
 {
@@ -20,12 +40,13 @@ Room* Dungeon::generateRoom(int x, int y)
 	//a random generator w/ a % chance of returning true
 	random_device rd;
 	mt19937 eng(rd());
-	tr1::bernoulli_distribution randOpen(0.8);	//40% chance of true
+	tr1::bernoulli_distribution randOpen(CHANCE_OF_OPEN_DOOR);	//% chance of true
 
 	Room *temp = new Room;
 	temp->x = x;
 	temp->y = y;
 	map[x][y] = temp;
+	cout << x << "   " << y << endl;		//****DELETE THIS
 
 	//~~~ check adjacent rooms on the map and randomly open doors: ~~~//
 	//left
@@ -109,32 +130,31 @@ Dungeon::Dungeon() : map{}
 	Room *temp = new Room;
 	srand(time(0));
 
-	//pick a random corner to begin in
-	switch ((rand() % 4)){
-	case UPPER_LEFT:
-		temp->x = 0;
-		temp->y = 0;
-		break;
-	case UPPER_RIGHT:
-		temp->x = 0;
-		temp->y = dungeonWidth - 1;
-		break;
-	case LOWER_LEFT:
-		temp->x = dungeonHeight - 1;
-		temp->y = 0;
-		break;
-	case LOWER_RIGHT:
-		temp->x = dungeonHeight - 1; 
-		temp->y = dungeonWidth - 1;
-		break;
-	}
+	////pick a random corner to begin in
+	//switch ((rand() % 4)){
+	//case UPPER_LEFT:
+	//	temp->x = 0;
+	//	temp->y = 0;
+	//	break;
+	//case UPPER_RIGHT:
+	//	temp->x = 0;
+	//	temp->y = dungeonWidth - 1;
+	//	break;
+	//case LOWER_LEFT:
+	//	temp->x = dungeonHeight - 1;
+	//	temp->y = 0;
+	//	break;
+	//case LOWER_RIGHT:
+	//	temp->x = dungeonHeight - 1; 
+	//	temp->y = dungeonWidth - 1;
+	//	break;
+	//}
 
+	temp->x = rand() % dungeonHeight;
+	temp->y = rand() % dungeonWidth;
 
 	temp = generateRoom(temp->x, temp->y);
 	map[temp->x][temp->y] = temp;
-
-	cout << "UL:" << map[temp->x][temp->y]->left << "  UR:" << map[temp->x][temp->y]->right << endl;
-	cout << "LL:" << map[temp->x][temp->y]->top << "  LR:" << map[temp->x][temp->y]->bottom << endl;
 
 
 	//print dungeon array of rooms
