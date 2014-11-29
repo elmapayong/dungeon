@@ -2,7 +2,10 @@
 
 int main()
 {
+	{
+		Dungeon mainDungeon;
+	}
 
-	Dungeon mainDungeon;
+	system("pause");
 
 }
