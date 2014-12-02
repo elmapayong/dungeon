@@ -20,11 +20,11 @@ class Dungeon
 {
 public:
 	Dungeon();
-	Room* generateRoom(int, int);
+	void generateRoom(int);
 	//Room* map[dungeonHeight][dungeonWidth];
 	//unique_ptr<Room[]> map;
+	void initRoomFromIndex(int);
 	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
-	void printMap();
 
 private:
 	int totalRooms = 0;

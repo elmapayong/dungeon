@@ -3,10 +3,16 @@
 
 #include <iostream>
 
+struct Coordinates{
+	int x;
+	int y;
+};
+
+
 class Room
 {
 public:
-	int x, y;
+	Coordinates coord;
 	bool left = false, right = false;
 	bool top = false, bottom = false;
 	Room() { std::cout << "\nnew instance\n"; }
