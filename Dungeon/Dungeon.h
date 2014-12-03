@@ -3,11 +3,13 @@
 
 #include "Room.h"
 #include <memory>		//smart pointers
-#include <iostream>
+#include <iostream>		//cout
 #include <cstdlib>		//rand()
 #include <ctime>		//to seed srand()
-#include <random>		//random generators
+#include <random>		//random device
+#include <algorithm>	//mt19937
 #include <array>
+#include <vector>
 using namespace std;
 
 const int dungeonWidth = 10;
@@ -21,9 +23,9 @@ class Dungeon
 public:
 	Dungeon();
 	void generateRoom(int);
-	//Room* map[dungeonHeight][dungeonWidth];
-	//unique_ptr<Room[]> map;
 	void initRoomFromIndex(int);
+	int findX(int);
+	int findY(int);
 	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
 
 private:
