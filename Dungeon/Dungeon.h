@@ -12,9 +12,9 @@
 #include <vector>
 using namespace std;
 
-const int dungeonWidth = 10;
-const int dungeonHeight = 5;
-const int maxRooms = 12;
+const int dungeonWidth = 3;
+const int dungeonHeight = 3;
+const int maxRooms = 4;
 const float CHANCE_OF_OPEN_DOOR = 0.6;
 
 
