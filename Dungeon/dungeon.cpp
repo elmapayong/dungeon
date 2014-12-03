@@ -48,10 +48,6 @@ void Dungeon::generateRoom(int index)
 	vector<int> shuffled_doors = { 1, 2, 3, 4 };	
 	shuffle(shuffled_doors.begin(), shuffled_doors.end(), randomize);
 
-	//DELETE
-	//cout << shuffled_doors[0] << shuffled_doors[1] << shuffled_doors[2] << shuffled_doors[3] << endl << endl;
-
-
 	//a random generator w/ a % chance of returning true
 	tr1::bernoulli_distribution randOpen(CHANCE_OF_OPEN_DOOR);	//% chance of true
 
@@ -62,8 +58,7 @@ void Dungeon::generateRoom(int index)
 			//left
 			case 1:
 				if ((index % dungeonWidth) != 0){
-					if (map[index - 1] == NULL){
-						if (totalRooms < maxRooms){
+					if (map[index - 1] == NULL && totalRooms < maxRooms){
 							map[index]->left = randOpen(randomize);
 							//door opened, make a new room on the left
 							if (map[index]->left){
@@ -72,11 +67,6 @@ void Dungeon::generateRoom(int index)
 								generateRoom(index - 1);
 								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
-						}
-					}
-					else{
-						//already a room on the left
-						map[index]->left = true;
 					}
 				}
 				break;
@@ -84,8 +74,7 @@ void Dungeon::generateRoom(int index)
 			//right
 			case 2:
 				if ((index + 1) < (dungeonHeight*dungeonWidth) && ((index + 1) % dungeonWidth) != 0){
-					if (map[index + 1] == NULL){
-						if (totalRooms < maxRooms){
+					if (map[index + 1] == NULL && totalRooms < maxRooms){
 							map[index]->right = randOpen(randomize);
 							//door opened, make a new room on the right
 							if (map[index]->right){
@@ -94,11 +83,6 @@ void Dungeon::generateRoom(int index)
 								generateRoom(index + 1);
 								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
-						}
-					}
-					else{
-						//already a room on the right
-						map[index]->right = true;
 					}
 				}
 				break;
@@ -106,8 +90,7 @@ void Dungeon::generateRoom(int index)
 			//top
 			case 3:
 				if ((index - dungeonWidth) >= 0){
-					if (map[index - dungeonWidth] == NULL){
-						if (totalRooms < maxRooms){
+					if (map[index - dungeonWidth] == NULL && totalRooms < maxRooms){
 							map[index]->top = randOpen(randomize);
 							//door opened, make a new room on the top
 							if (map[index]->top){
@@ -116,11 +99,6 @@ void Dungeon::generateRoom(int index)
 								generateRoom(index - dungeonWidth);
 								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
-						}
-					}
-					else{
-						//already a room on top
-						map[index]->top = true;
 					}
 				}
 				break;
@@ -128,8 +106,7 @@ void Dungeon::generateRoom(int index)
 			//bottom
 			case 4:
 				if ((index + dungeonWidth) < (dungeonHeight*dungeonWidth)){
-					if (map[index + dungeonWidth] == NULL){
-						if (totalRooms < maxRooms){
+					if (map[index + dungeonWidth] == NULL && totalRooms < maxRooms){
 							map[index]->bottom = randOpen(randomize);
 							//door opened, make a new room on the bottom
 							if (map[index]->bottom){
@@ -138,11 +115,6 @@ void Dungeon::generateRoom(int index)
 								generateRoom(index + dungeonWidth);
 								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
-						}
-					}
-					else{
-						//already a room on the bottom
-						map[index]->bottom = true;
 					}
 				}
 				break;
@@ -173,6 +145,40 @@ Dungeon::Dungeon()
 	//DELETE
 	//cout << map.get()[index]->x << "  " << map.get()[index]->y << endl;
 	cout << map[index]->coord.x << "  " << map[index]->coord.y << endl << endl;
+
+
+	//opens doors leading to adjacent rooms
+	for (int i = 0; i < (dungeonHeight*dungeonWidth); i++){
+		if (map[i] != NULL){
+			if ((i % dungeonWidth) != 0 && map[i - 1] != NULL)
+				map[i]->left = true;
+			//right
+			if (((i + 1) < (dungeonHeight*dungeonWidth) && ((i + 1) % dungeonWidth) != 0) && map[i + 1] != NULL)
+				map[i]->right = true;
+			//top
+			if ((i - dungeonWidth) >= 0 && map[i - dungeonWidth] != NULL)
+				map[i]->top = true;
+			//bottom
+			if ((i + dungeonWidth) < (dungeonHeight*dungeonWidth) && map[i + dungeonWidth] != NULL)
+				map[i]->bottom = true;
+		}
+	}
+
+	////open doors with adjacent rooms - redundant for some doors but if an adjacent
+	////room was created after, the door is not opened.
+	////left
+	//if ((index % dungeonWidth) != 0 && map[index - 1] != NULL)
+	//	map[index]->left = true;
+	////right
+	//if (((index + 1) < (dungeonHeight*dungeonWidth) && ((index + 1) % dungeonWidth) != 0) && map[index + 1] != NULL)
+	//	map[index]->right = true;
+	////top
+	//if ((index - dungeonWidth) >= 0 && map[index - dungeonWidth] != NULL)
+	//	map[index]->top = true;
+	////bottom
+	//if ((index + dungeonWidth) < (dungeonHeight*dungeonWidth) && map[index + dungeonWidth] != NULL)
+	//	map[index]->bottom = true;
+
 
 
 	//prints map
@@ -229,7 +235,6 @@ Dungeon::Dungeon()
 			}
 
 		}
-		//cout << "\n";
 	}
 
 
