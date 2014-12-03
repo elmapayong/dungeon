@@ -15,7 +15,7 @@ using namespace std;
 const int dungeonWidth = 10;
 const int dungeonHeight = 5;
 const int maxRooms = 12;
-const float CHANCE_OF_OPEN_DOOR = 0.9;
+const float CHANCE_OF_OPEN_DOOR = 0.6;
 
 
 class Dungeon
