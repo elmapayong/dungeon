@@ -6,19 +6,31 @@ string Room::FillNumber(int num){
 	return fill.str();
 }
 
-Room::Room(int height, int width){
-	int wallLimit = (((2 * (height - 2)) + (2 * width)) / 4);
-	ofstream file("map.map");
-	for (int i = 0; i < height; ++i)
+//Room::Room()
+
+Room::Room(int x, int y){
+	coord.x = x;
+	coord.y = y;
+
+	int wallLimit = (((2 * (HEIGHT - 2)) + (2 * WIDTH)) / 4);
+
+	filename = "map.map";
+	stringstream subfilename;
+	subfilename << coord.x << coord.y;
+	filename.insert(3, subfilename.str());
+	cout << filename << endl;
+
+	ofstream file(filename);
+	for (int i = 0; i < HEIGHT; ++i)
 	{
 		int toLimit = 0;
-		for (int j = 0; j < width; ++j)
+		for (int j = 0; j < WIDTH; ++j)
 		{
-			if ((i == (height / 2) && (j == 0 || j == (width - 1))) || (j == (width / 2) && (i == 0 || i == (height - 1))))
+			if ((i == (HEIGHT / 2) && (j == 0 || j == (WIDTH - 1))) || (j == (WIDTH / 2) && (i == 0 || i == (HEIGHT - 1))))
 			{
 				file << FillNumber(1) << " ";
 			}
-			else if (i == 0 || i == (height - 1) || j == 0 || j == (width - 1) && (i != (height / 2) || j != (width / 2)))
+			else if (i == 0 || i == (HEIGHT - 1) || j == 0 || j == (WIDTH - 1) && (i != (HEIGHT / 2) || j != (WIDTH / 2)))
 			{
 				file << FillNumber(0) << " ";
 			}
@@ -44,4 +56,15 @@ Room::Room(int height, int width){
 		file << "\n";
 	}
 	file.close();
+
+	string line;
+	ifstream file2(filename);
+	if (file2.is_open())
+	{
+		while (getline(file2, line))
+		{
+			cout << line << '\n';
+		}
+		file2.close();
+	}
 }

@@ -38,7 +38,8 @@ void Dungeon::generateRoom(int index)
 	initRoomFromIndex(index);
 	x = findX(index);
 	y = findY(index);
-	cout << "( " << x << ", " << y << " )" << endl;
+
+	//cout << "( " << x << ", " << y << " )" << endl;
 
 	//random engine for shuffling doors
 	random_device rd;

@@ -8,6 +8,10 @@
 #include <sstream>
 using namespace std;
 const int TOTAL_TILE_SPRITES = 4;
+const int HEIGHT = 12;
+const int WIDTH = 16;
+//const int dungeonWidth = 10;
+//const int dungeonHeight = 5;
 
 struct Coordinates{
 	int x;
@@ -18,13 +22,15 @@ struct Coordinates{
 class Room
 {
 public:
+	Room() { };
 	Room(int, int);
 	Coordinates coord;
 	bool left = false, right = false;
 	bool top = false, bottom = false;
+	string filename;
 	string FillNumber(int);
 	//Room() { std::cout << "\nnew instance\n"; }
-	//~Room() { std::cout << "\ndeleted Room\n"; }
+	~Room() { remove(filename.c_str()); }
 };
 
 #endif
