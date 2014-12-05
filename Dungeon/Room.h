@@ -7,9 +7,9 @@
 #include <string>
 #include <sstream>
 using namespace std;
-const int TOTAL_TILE_SPRITES = 4;
-const int HEIGHT = 12;
-const int WIDTH = 16;
+//const int TOTAL_TILE_SPRITES = 4;
+const int HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
+const int WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 //const int dungeonWidth = 10;
 //const int dungeonHeight = 5;
 
