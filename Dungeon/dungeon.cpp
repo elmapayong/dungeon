@@ -143,11 +143,10 @@ Dungeon::Dungeon()
 	generateRoom(index);
 
 	//DELETE
-	//cout << map.get()[index]->x << "  " << map.get()[index]->y << endl;
 	cout << map[index]->coord.x << "  " << map[index]->coord.y << endl << endl;
 
 
-	//opens doors leading to adjacent rooms
+	//goes through entire map and opens doors leading to adjacent rooms
 	for (int i = 0; i < (dungeonHeight*dungeonWidth); i++){
 		if (map[i] != NULL){
 			if ((i % dungeonWidth) != 0 && map[i - 1] != NULL)
@@ -164,24 +163,7 @@ Dungeon::Dungeon()
 		}
 	}
 
-	////open doors with adjacent rooms - redundant for some doors but if an adjacent
-	////room was created after, the door is not opened.
-	////left
-	//if ((index % dungeonWidth) != 0 && map[index - 1] != NULL)
-	//	map[index]->left = true;
-	////right
-	//if (((index + 1) < (dungeonHeight*dungeonWidth) && ((index + 1) % dungeonWidth) != 0) && map[index + 1] != NULL)
-	//	map[index]->right = true;
-	////top
-	//if ((index - dungeonWidth) >= 0 && map[index - dungeonWidth] != NULL)
-	//	map[index]->top = true;
-	////bottom
-	//if ((index + dungeonWidth) < (dungeonHeight*dungeonWidth) && map[index + dungeonWidth] != NULL)
-	//	map[index]->bottom = true;
-
-
-
-	//prints map
+	//prints map - shows created rooms
 	for (int row = 0; row < (dungeonHeight*dungeonWidth); row++){
 		cout << (map[row] == NULL ? "0" : "1");
 		if (row != 0 && (row + 1) % dungeonWidth == 0) cout << "\n";
@@ -189,7 +171,7 @@ Dungeon::Dungeon()
 
 	cout << endl;
 
-	//prints map
+	//prints map - shows open doors
 	for (int i = 0; i < dungeonHeight; i++){
 		for (int level = 0; level < 3; level++){
 			switch (level){
