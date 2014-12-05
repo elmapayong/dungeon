@@ -15,11 +15,7 @@ int Dungeon::findY(int index){
 
 /* Allocates a room at the given index and sets its coordinates */
 void Dungeon::initRoomFromIndex(int index){
-	map[index] = make_unique<Room>();
-
-	//set (x,y) coordinates from 1D array
-	map[index]->coord.x = findX(index);
-	map[index]->coord.y = findY(index);
+	map[index] = make_unique<Room>(findX(index), findY(index));
 }
 
 
@@ -38,7 +34,6 @@ void Dungeon::generateRoom(int index)
 	initRoomFromIndex(index);
 	x = findX(index);
 	y = findY(index);
-
 	//cout << "( " << x << ", " << y << " )" << endl;
 
 	//random engine for shuffling doors

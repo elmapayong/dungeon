@@ -6,8 +6,6 @@ string Room::FillNumber(int num){
 	return fill.str();
 }
 
-//Room::Room()
-
 Room::Room(int x, int y){
 	coord.x = x;
 	coord.y = y;
