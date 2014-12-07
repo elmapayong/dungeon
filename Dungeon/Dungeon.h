@@ -22,13 +22,13 @@ class Dungeon
 {
 public:
 	Dungeon();
+	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
+
+private:
 	void generateRoom(int);
 	void initRoomFromIndex(int);
 	int findX(int);
 	int findY(int);
-	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
-
-private:
 	int totalRooms = 0;
 };
 

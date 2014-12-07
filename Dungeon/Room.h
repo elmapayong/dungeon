@@ -7,9 +7,9 @@
 #include <string>
 #include <sstream>
 using namespace std;
-//const int TOTAL_TILE_SPRITES = 4;
-const int HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
-const int WIDTH = SCREEN_WIDTH / TILE_WIDTH;
+
+//DELETE
+const int TOTAL_TILE_SPRITES = 4;
 //const int dungeonWidth = 10;
 //const int dungeonHeight = 5;
 
@@ -28,9 +28,14 @@ public:
 	bool left = false, right = false;
 	bool top = false, bottom = false;
 	string filename;
-	string FillNumber(int);
-	//Room() { std::cout << "\nnew instance\n"; }
 	~Room() { remove(filename.c_str()); }
+
+private:
+	string FillNumber(int);
+	int HEIGHT = 12;
+	int WIDTH = 10;
+	//int HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
+	//const int WIDTH = SCREEN_WIDTH / TILE_WIDTH;
 };
 
 #endif
