@@ -3,21 +3,76 @@
 
 enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
+//prints map showing only which rooms have been created
+void Dungeon::printMap(){
+	for (int row = 0; row < (dungeonHeight*dungeonWidth); row++){
+		cout << (map[row] == NULL ? "0" : "1");
+		if (row != 0 && (row + 1) % dungeonWidth == 0) cout << "\n";
+	}
+}
+
+
+//prints map showing open doors in rooms
+void Dungeon::printRoomsMap(){
+	for (int i = 0; i < dungeonHeight; i++){
+		for (int level = 0; level < 3; level++){
+			switch (level){
+			case 0:
+				for (int j = 0; j < dungeonWidth; j++){
+					if (map[(i*dungeonWidth) + j] != NULL){
+						cout << " ";
+						cout << (map[(i*dungeonWidth) + j]->up ? "o" : "-");
+						cout << " ";
+					}
+					else{
+						cout << " - ";
+					}
+				}
+				cout << endl;
+				break;
+			case 1:
+				for (int j = 0; j < dungeonWidth; j++){
+					if (map[(i*dungeonWidth) + j] != NULL){
+						cout << (map[(i*dungeonWidth) + j]->left ? "o" : "|");
+						cout << " " << (map[(i*dungeonWidth) + j]->right ? "o" : "|");
+					}
+					else{
+						cout << "| |";
+					}
+				}
+				cout << endl;
+				break;
+			case 2:
+				for (int j = 0; j < dungeonWidth; j++){
+					if (map[(i*dungeonWidth) + j] != NULL){
+						cout << " ";
+						cout << (map[(i*dungeonWidth) + j]->down ? "o" : "-");
+						cout << " ";
+					}
+					else{
+						cout << " - ";
+					}
+				}
+				cout << endl;
+				break;
+				cout << endl;
+			}
+
+		}
+	}
+}
+
+
 //returns x position from given index of 2D array
 int Dungeon::findX(int index){
 	return index / dungeonWidth;
 }
 
+
 //returns x position from given index of 2D array
 int Dungeon::findY(int index){
 	return index % dungeonWidth; 
 }
-
-/* Allocates a room at the given index and sets its coordinates */
-void Dungeon::initRoomFromIndex(int index){
-	map[index] = make_unique<Room>(findX(index), findY(index));
-}
-
 
 
 /* Creates room at the given index.  Opens room's doors if there are rooms already next to it,
@@ -25,16 +80,15 @@ void Dungeon::initRoomFromIndex(int index){
    Recursive.  */
 void Dungeon::generateRoom(int index)
 {
+	//DELETE
 	cout << "total rooms: " << totalRooms << endl;
 	//room out of bounds
 	if (index >= (dungeonHeight*dungeonWidth))
 		return;
 
-	int x, y;
-	initRoomFromIndex(index);
-	x = findX(index);
-	y = findY(index);
-	//cout << "( " << x << ", " << y << " )" << endl;
+	//make the room at its coordinates
+	map[index] = make_unique<Room>(findX(index), findY(index));
+
 
 	//random engine for shuffling doors
 	random_device rd;
@@ -45,7 +99,7 @@ void Dungeon::generateRoom(int index)
 	shuffle(shuffled_doors.begin(), shuffled_doors.end(), randomize);
 
 	//a random generator w/ a % chance of returning true
-	tr1::bernoulli_distribution randOpen(CHANCE_OF_OPEN_DOOR);	//% chance of true
+	tr1::bernoulli_distribution randOpen(CHANCE_OF_OPEN_DOOR);
 
 
 	//go through each door and randomly try to open each
@@ -59,9 +113,7 @@ void Dungeon::generateRoom(int index)
 							//door opened, make a new room on the left
 							if (map[index]->left){
 								totalRooms++;
-								cout << "left: " << map[index]->left << " from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 								generateRoom(index - 1);
-								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
 					}
 				}
@@ -75,41 +127,35 @@ void Dungeon::generateRoom(int index)
 							//door opened, make a new room on the right
 							if (map[index]->right){
 								totalRooms++;
-								cout << "right: " << map[index]->right << " from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 								generateRoom(index + 1);
-								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
 					}
 				}
 				break;
 
-			//top
+			//up
 			case 3:
 				if ((index - dungeonWidth) >= 0){
 					if (map[index - dungeonWidth] == NULL && totalRooms < maxRooms){
-							map[index]->top = randOpen(randomize);
-							//door opened, make a new room on the top
-							if (map[index]->top){
+							map[index]->up = randOpen(randomize);
+							//door opened, make a new room on the up
+							if (map[index]->up){
 								totalRooms++;
-								cout << "up: " << map[index]->top << " from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 								generateRoom(index - dungeonWidth);
-								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
 					}
 				}
 				break;
 
-			//bottom
+			//down
 			case 4:
 				if ((index + dungeonWidth) < (dungeonHeight*dungeonWidth)){
 					if (map[index + dungeonWidth] == NULL && totalRooms < maxRooms){
-							map[index]->bottom = randOpen(randomize);
-							//door opened, make a new room on the bottom
-							if (map[index]->bottom){
+							map[index]->down = randOpen(randomize);
+							//door opened, make a new room on the down
+							if (map[index]->down){
 								totalRooms++;
-								cout << "down: " << map[index]->bottom << " from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 								generateRoom(index + dungeonWidth);
-								cout << "done from:" << "( " << findX(index) << ", " << findY(index) << " )" << endl << endl;
 							}
 					}
 				}
@@ -125,22 +171,13 @@ void Dungeon::generateRoom(int index)
 
 Dungeon::Dungeon()
 {
-
-	int index;
-	
-
 	random_device rd;
 	mt19937 mt(rd());
 	uniform_int_distribution<int> dist(0, (dungeonHeight*dungeonWidth) - 1);
 
 	//make first room at a random place in the map
 	++totalRooms;
-	index = dist(mt);		//DELETE and stick in generateRoom later
-	generateRoom(index);
-
-	//DELETE
-	cout << map[index]->coord.x << "  " << map[index]->coord.y << endl << endl;
-
+	generateRoom(dist(mt));		//makes subsequent rooms from first room
 
 	//goes through entire map and opens doors leading to adjacent rooms
 	for (int i = 0; i < (dungeonHeight*dungeonWidth); i++){
@@ -150,108 +187,24 @@ Dungeon::Dungeon()
 			//right
 			if (((i + 1) < (dungeonHeight*dungeonWidth) && ((i + 1) % dungeonWidth) != 0) && map[i + 1] != NULL)
 				map[i]->right = true;
-			//top
+			//up
 			if ((i - dungeonWidth) >= 0 && map[i - dungeonWidth] != NULL)
-				map[i]->top = true;
-			//bottom
+				map[i]->up = true;
+			//down
 			if ((i + dungeonWidth) < (dungeonHeight*dungeonWidth) && map[i + dungeonWidth] != NULL)
-				map[i]->bottom = true;
+				map[i]->down = true;
 		}
 	}
 
-	//prints map - shows created rooms
-	for (int row = 0; row < (dungeonHeight*dungeonWidth); row++){
-		cout << (map[row] == NULL ? "0" : "1");
-		if (row != 0 && (row + 1) % dungeonWidth == 0) cout << "\n";
-	}
+	//DELETE
+	cout << endl;
+
+	printMap();
 
 	cout << endl;
 
-	//prints map - shows open doors
-	for (int i = 0; i < dungeonHeight; i++){
-		for (int level = 0; level < 3; level++){
-			switch (level){
-			case 0:
-				for (int j = 0; j < dungeonWidth; j++){
-					if (map[(i*dungeonWidth) + j] != NULL){
-						cout << " ";
-						cout << (map[(i*dungeonWidth) + j]->top ? "o" : "-");
-						cout << " ";
-					}
-					else{
-						cout << " - ";
-					}
-				}
-				cout << endl;
-				break;
-			case 1:
-				for (int j = 0; j < dungeonWidth; j++){
-					if (map[(i*dungeonWidth)+j] != NULL){
-						cout << (map[(i*dungeonWidth) + j]->left ? "o" : "|");
-						cout << " " << (map[(i*dungeonWidth) + j]->right ? "o" : "|");
-					}
-					else{
-						cout << "| |";
-					}
-				}
-				cout << endl;
-				break;
-			case 2:
-				for (int j = 0; j < dungeonWidth; j++){
-					if (map[(i*dungeonWidth) + j] != NULL){
-						cout << " ";
-						cout << (map[(i*dungeonWidth) + j]->bottom ? "o" : "-");
-						cout << " ";
-					}
-					else{
-						cout << " - ";
-					}
-				}
-				cout << endl;
-				break;
-				cout << endl;
-			}
+	printRoomsMap();
 
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-	////print dungeon array of rooms
-	//for (int row = 0; row < dungeonHeight; row++){
-	//	for (int col = 0; col < dungeonWidth; col++){
-	//		cout << (map[row][col] ? "1" : "0");
-	//	}
-	//	cout << "\n"; 
-	//}
-
-	//while (totalRooms < maxRooms){
-
-	//int blah = 1;
-	//unique_ptr<int*[]> uptr = make_unique<int*[]>(dungeonHeight*dungeonWidth);
-	//uptr = {NULL};
-
-
-
-	//cout << endl << endl;
-	//cout << uptr.get()[50] << "  " << &blah;
-
-	//for (int row = 0; row < dungeonHeight; row++){
-	//	for (int col = 0; col < dungeonWidth; col++){
-	//		cout << (uptr[row][col] == 0 ? "1" : "0");
-	//	}
-	//	cout << "\n";
-	//}
-
-	//}
 }
 
 

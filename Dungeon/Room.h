@@ -26,16 +26,16 @@ public:
 	Room(int, int);
 	Coordinates coord;
 	bool left = false, right = false;
-	bool top = false, bottom = false;
+	bool up = false, down = false;
 	string filename;
 	~Room() { remove(filename.c_str()); }
 
 private:
 	string FillNumber(int);
-	int HEIGHT = 12;
-	int WIDTH = 10;
-	//int HEIGHT = SCREEN_HEIGHT / TILE_HEIGHT;
-	//const int WIDTH = SCREEN_WIDTH / TILE_WIDTH;
+	int height = 12;
+	int width = 10;
+	//int height = SCREEN_HEIGHT / TILE_HEIGHT;
+	//int width = SCREEN_WIDTH / TILE_WIDTH;
 };
 
 #endif
