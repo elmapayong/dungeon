@@ -177,7 +177,8 @@ Dungeon::Dungeon()
 
 	//make first room at a random place in the map
 	++totalRooms;
-	generateRoom(dist(mt));		//makes subsequent rooms from first room
+	firstRoom = dist(mt);
+	generateRoom(firstRoom);		//makes subsequent rooms from first room
 
 	//goes through entire map and opens doors leading to adjacent rooms
 	for (int i = 0; i < (dungeonHeight*dungeonWidth); i++){

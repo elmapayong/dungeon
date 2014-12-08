@@ -22,14 +22,15 @@ class Dungeon
 {
 public:
 	Dungeon();
+	int firstRoom;
 	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
-	void printMap();		//shows rooms created
-	void printRoomsMap();	//shows rooms with open doors
+	int findX(int);
+	int findY(int);
+	void printMap();		//prints rooms created
+	void printRoomsMap();	//prints rooms with open doors
 
 private:
 	void generateRoom(int);
-	int findX(int);
-	int findY(int);
 	int totalRooms = 0;
 };
 
