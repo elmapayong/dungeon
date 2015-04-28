@@ -1,3 +1,7 @@
+/* ROOM FILES MADE BY https://github.com/RianovRV1
+* Generates random tiles for a room in a dungeon.
+*/
+
 #include "Room.h"
 
 string Room::FillNumber(int num){
