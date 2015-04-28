@@ -5,8 +5,9 @@ enum Corner { UPPER_LEFT, UPPER_RIGHT, LOWER_LEFT, LOWER_RIGHT };
 
 //prints map showing only which rooms have been created
 void Dungeon::printMap(){
+	cout << "ROOMS CREATED IN " << dungeonWidth << "x" << dungeonHeight << " MAP:\n" << endl;
 	for (int row = 0; row < (dungeonHeight*dungeonWidth); row++){
-		cout << (map[row] == NULL ? "0" : "1");
+		cout << (map[row] == NULL ? "0" : "1");		//1 indicates room created
 		if (row != 0 && (row + 1) % dungeonWidth == 0) cout << "\n";
 	}
 }
@@ -14,6 +15,8 @@ void Dungeon::printMap(){
 
 //prints map showing open doors in rooms
 void Dungeon::printRoomsMap(){
+	cout << "OPEN DOORS CREATED IN EACH ROOM:" << endl;
+	cout << "(o indicates open door; - and | indicate closed doors)" << endl;
 	for (int i = 0; i < dungeonHeight; i++){
 		for (int level = 0; level < 3; level++){
 			switch (level){
@@ -21,7 +24,7 @@ void Dungeon::printRoomsMap(){
 				for (int j = 0; j < dungeonWidth; j++){
 					if (map[(i*dungeonWidth) + j] != NULL){
 						cout << " ";
-						cout << (map[(i*dungeonWidth) + j]->up ? "o" : "-");
+						cout << (map[(i*dungeonWidth) + j]->up ? "o" : "-");	//o indicates open door
 						cout << " ";
 					}
 					else{
@@ -80,8 +83,6 @@ int Dungeon::findY(int index){
    Recursive.  */
 void Dungeon::generateRoom(int index)
 {
-	//DELETE
-	cout << "total rooms: " << totalRooms << endl;
 	//room out of bounds
 	if (index >= (dungeonHeight*dungeonWidth))
 		return;
@@ -197,7 +198,8 @@ Dungeon::Dungeon()
 		}
 	}
 
-	//DELETE
+
+	//PRINTS RESULTS
 	cout << endl;
 
 	printMap();
@@ -205,6 +207,8 @@ Dungeon::Dungeon()
 	cout << endl;
 
 	printRoomsMap();
+
+	cout << endl;
 
 }
 

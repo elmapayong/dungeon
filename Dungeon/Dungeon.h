@@ -4,8 +4,6 @@
 #include "Room.h"
 #include <memory>		//smart pointers
 #include <iostream>		//cout
-//#include <cstdlib>		//rand()
-//#include <ctime>		//to seed srand()
 #include <random>		//random device
 #include <algorithm>	//mt19937
 #include <array>
@@ -26,8 +24,8 @@ public:
 	array<unique_ptr<Room>, (dungeonHeight*dungeonWidth)> map;
 	int findX(int);
 	int findY(int);
-	void printMap();		//prints rooms created
-	void printRoomsMap();	//prints rooms with open doors
+	void printMap();		//prints map of rooms created
+	void printRoomsMap();	//prints map of rooms indicating open doors
 
 private:
 	void generateRoom(int);

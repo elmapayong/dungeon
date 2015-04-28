@@ -16,7 +16,7 @@ Room::Room(int x, int y){
 	stringstream subfilename;
 	subfilename << setfill('0') << setw(2) << coord.x << setfill('0') << setw(2) << coord.y;
 	filename.insert(3, subfilename.str());
-	cout << filename << endl;
+	//cout << filename << endl;
 
 	ofstream file(filename);
 	for (int i = 0; i < height; ++i)
@@ -55,14 +55,15 @@ Room::Room(int x, int y){
 	}
 	file.close();
 
-	string line;
-	ifstream file2(filename);
-	if (file2.is_open())
-	{
-		while (getline(file2, line))
-		{
-			cout << line << '\n';
-		}
-		file2.close();
-	}
+	//PRINTS TILE# IN EACH ROOM
+	//string line;
+	//ifstream file2(filename);
+	//if (file2.is_open())
+	//{
+	//	while (getline(file2, line))
+	//	{
+	//		cout << line << '\n';
+	//	}
+	//	file2.close();
+	//}
 }
